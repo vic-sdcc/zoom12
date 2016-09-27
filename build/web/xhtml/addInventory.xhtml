@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:prcc="http://java.sun.com/jsf/composite/prcomponents"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/templates/layout.xhtml">
+        <ui:define name="top">
+            #{bundle.Add}
+        </ui:define>
+        <ui:define id="addContent" name="content">
+            <h:form id="addForm">
+                <p:remoteCommand name="testAutoRun"
+                                 actionListener="#{inventoryBean.beanclear}"
+                                 autoRun="true"/>
+                <f:event type="preRenderView" listener="#{inventoryBean.init}"/>
+                <prcc:dataTableInvUtilForm canNotInput="false"/>
+                <br/>
+                <br/>
+                <prcc:addInvUtilForm canNotInput="false"/>
+                <br/>
+                <p>
+                    <span>
+                        <h:commandButton value="SAVE" action="#{inventoryBean.save}"/>
+                        <h:commandButton value="CANCEL" action="#{inventoryBean.cancelBtn}" immediate="true"/>
+                    </span>
+                </p>
+
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+

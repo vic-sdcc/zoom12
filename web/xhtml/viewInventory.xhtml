@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:prcc="http://java.sun.com/jsf/composite/prcomponents">
+    <ui:composition template="/templates/layout.xhtml">
+        <ui:define name="top">
+            #{bundle.View}
+        </ui:define>
+        <ui:define id="viewContent" name="content">
+            <h:form id="viewForm">
+                <f:event type="preRenderView" listener="#{inventoryBean.init}"/>
+                <h4>Material List:</h4>
+                <br/>
+                <p:dataTable id="inventoryList"
+                             value="#{inventoryBean.edumatList}"
+                             var="iList"
+                             scrollHeight="200"
+                             scrollRows="100"
+                             scrollable="true"
+                             liveScroll="true"
+                             rowIndexVar="rowIndex"
+                             rowKey="#{iList.invNo}"
+                             selectionMode="single"
+                             selection="#{inventoryBean.selectedMaterial}">
+                    <p:ajax event="rowSelect"
+                            async="true"
+                            update=":viewForm"
+                            listener="#{inventoryBean.CodeType}"/>
+                    <p:column headerText="Title">
+                        <h:outputText value="#{iList.title}"/>
+                    </p:column>
+                    <p:column headerText="Author">
+                        <h:outputText value="#{iList.author}"/>
+                    </p:column>
+                    <p:column headerText="Type">
+                        <h:outputText value="#{iList.typeId.typeName}"/>
+                    </p:column>
+                    <p:column headerText="Copy No.">
+                        <h:outputText value="#{iList.copyNo}"/>
+                    </p:column>
+                    <p:column headerText="Encoder">
+                        <h:outputText value="#{iList.ouCode}"/>
+                    </p:column>
+                    <p:column headerText="Tags">
+                        <ui:repeat var="kTag" value="#{inventoryBean.keyList(iList.invNo)}" >
+                            <p:row>
+                                <p:outputLabel value="#{kTag.keyTag},"/>
+                            </p:row>
+                        </ui:repeat>
+                    </p:column>
+                </p:dataTable>
+                <br/>
+                <br/>
+                <prcc:vieweditdeleteInvUtilForm canNotInput="true" buttonNotRender="true"/>
+                <br/>
+                <p><span>
+                        <h:outputText id="prompt" rendered="#{empty inventoryBean.selectedMaterial.invNo}" value="Select material from list above"/>
+                        <h:commandButton value="BACK" action="#{inventoryBean.cancelBtn}" rendered="#{not empty inventoryBean.selectedMaterial.invNo}"/>
+                        <h:commandButton value="EDIT" action="/xhtml/editInventory.xhtml" rendered="#{not empty inventoryBean.selectedMaterial.invNo}"/>
+                        <h:commandButton value="DELETE" action="/xhtml/deleteInventory.xhtml" rendered="#{not empty inventoryBean.selectedMaterial.invNo}"/>
+                    </span></p>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+
